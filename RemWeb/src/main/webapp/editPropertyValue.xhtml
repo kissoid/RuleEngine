@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment>
+        <h:form id="propertyValueForm">
+            <p:panelGrid>
+                <p:row>
+                    <p:column style="vertical-align: top;width: 300px;" rowspan="2">
+                        <p:dataTable id="propertyTable" var="property" value="#{editPropertyValueBean.propertyList}" selectionMode="single" selection="#{editPropertyValueBean.selectedProperty}" rowKey="#{property.iremPropertyId}">
+                            <p:ajax event="rowSelect" listener="#{editPropertyValueBean.editSelected}" update=":propertyValueForm" />
+                            <p:column headerText="Id" style="width:50px; text-align: right;">
+                                <h:outputText value="#{property.iremPropertyId}" />
+                            </p:column>
+                            <p:column headerText="Description">
+                                <h:outputText value="#{property.description}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column style="vertical-align: top;">
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Değer : " />
+                                    <p:inputText value="#{editPropertyValueBean.newPropertyValue.valString}" />
+                                    <p:commandButton value="Add" actionListener="#{editPropertyValueBean.addPropertyValueToProperty()}" update=":propertyValueForm" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="3">
+                                    <p:dataTable id="propertyValueTable" var="propertyValue" value="#{editPropertyValueBean.selectedProperty.iremPropertyValueList}" rowKey="#{propertyValue.rowKey}">
+                                        <p:column headerText="Id" style="width:50px; text-align: right;">
+                                            <h:outputText value="#{propertyValue.iremPropertyValueId}" />
+                                        </p:column>
+                                        <p:column headerText="Description">
+                                            <h:outputText value="#{propertyValue.valString}" />
+                                        </p:column>
+                                        <p:column style="width:30px;">
+                                            <p:commandButton icon="ui-icon-trash" actionListener="#{editPropertyValueBean.removePropertyValueFromList(propertyValue)}" update=":propertyValueForm" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:commandButton value="Save Property Values" actionListener="#{editPropertyValueBean.saveProperty()}" update=":propertyValueForm:propertyValueTable" style="float: right;" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+    </ui:fragment>
+</html>
+
+
+

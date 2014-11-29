@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:fragment>
+        <h:form id="scriptParameterForm">
+            <p:dataTable id="parameterTable" var="parameter" value="#{groovyEditorBean.scriptParameterList}" rowKey="#{parameter.rowKey}"
+                         editable="true" 
+                         editMode="cell" 
+                         paginator="true"
+                         rows="15"
+                         paginatorAlwaysVisible="false"
+                         paginatorPosition="bottom"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         >
+                <p:column headerText="Code" width="150">
+                    <h:outputText value="#{parameter.code}" />
+                </p:column>
+                <p:column headerText="Description" width="250">
+                    <h:outputText value="#{parameter.description}" />
+                </p:column>
+                <p:column headerText="Value">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{parameter.value}" /></f:facet>
+                        <f:facet name="input"><h:inputText value="#{parameter.value}" style="width: 100%;" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:fragment>
+</html>
+
+
+

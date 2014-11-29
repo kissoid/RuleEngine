@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment>
+            <h:form id="importTemplateForm">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Description :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="importTemplateDescription" value="#{editImportTemplateBean.newImportTemplate.description}" style="width:640px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Class name :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText  id="importTemplateClassName" value="#{editImportTemplateBean.newImportTemplate.className}" style="width:300px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Package path :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="importTemplatePackagePath" value="#{editImportTemplateBean.newImportTemplate.packagePath}" style="width:640px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Default :" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox id="importTemplateIsDefault" value="#{editImportTemplateBean.newImportTemplate.isDefault}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Clear" actionListener="#{editImportTemplateBean.clear()}" update=":importTemplateForm" style="float: right;" />
+                            <p:commandButton value="Save" actionListener="#{editImportTemplateBean.saveImportTemplate()}" update=":importTemplateForm,:scriptImportForm" style="float: right;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:dataTable id="importTemplateTable" var="template" value="#{editImportTemplateBean.importTemplateList}" selectionMode="single" selection="#{editImportTemplateBean.selectedImportTemplate}" rowKey="#{template.iremImportTemplateId}">
+                                <p:ajax event="rowSelect" listener="#{editImportTemplateBean.editSelected()}" update=":importTemplateForm" />
+                                <p:column headerText="Id" style="width:50px; text-align: right">
+                                    <h:outputText value="#{template.iremImportTemplateId}" />
+                                </p:column>
+                                <p:column headerText="Class Name" style="width:150px; text-align: left">
+                                    <h:outputText value="#{template.className}" />
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{template.description}" />
+                                </p:column>
+                                <p:column headerText="Default" width="50" style="text-align: center; width:50px;">
+                                    <p:selectBooleanCheckbox value="#{template.isDefault}" disabled="true" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+    </ui:fragment>
+</html>
+
+
+

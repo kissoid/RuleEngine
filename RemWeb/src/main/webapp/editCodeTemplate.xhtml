@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment>
+            <h:form id="codeTemplateForm">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Description :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="codeTemplateDescription" value="#{editCodeTemplateBean.newCodeTemplate.description}" style="width:650px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea  id="codeTemplateText" value="#{editCodeTemplateBean.newCodeTemplate.codeText}" style="width:650px;" rows="8" autoResize="false" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Clear" actionListener="#{editCodeTemplateBean.clear()}" update=":codeTemplateForm" style="float: right;" />
+                            <p:commandButton value="Save" actionListener="#{editCodeTemplateBean.saveCodeTemplate()}" update=":codeTemplateForm,:mainForm:codeTemplateList" style="float: right;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:dataTable id="codeTemplateTable" var="template" selectionMode="single" value="#{editCodeTemplateBean.codeTemplateList}" selection="#{editCodeTemplateBean.selectedCodeTemplate}" rowKey="#{template.iremCodeTemplateId}">
+                                <p:ajax event="rowSelect" listener="#{editCodeTemplateBean.editSelected()}" update=":codeTemplateForm" />
+                                <p:column headerText="Id" style="width:50px; text-align: right">
+                                    <h:outputText value="#{template.iremCodeTemplateId}" />
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{template.description}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+    </ui:fragment>
+</html>
+
+
+

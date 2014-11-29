@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment>
+        <h:form id="propertyForm">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Description :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{editPropertyBean.newProperty.description}" style="width: 450px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Code :" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText value="#{editPropertyBean.newProperty.iremPropertyCode}" style="width: 200px;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Clear" actionListener="#{editPropertyBean.clear()}" update=":propertyForm" style="float: right;" />
+                            <p:commandButton value="Save" actionListener="#{editPropertyBean.saveProperty()}" update=":propertyForm" style="float: right;" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:dataTable id="propertyTable" var="property" value="#{editPropertyBean.propertyList}" selectionMode="single" selection="#{editPropertyBean.selectedProperty}" rowKey="#{property.iremPropertyId}">
+                                <p:ajax event="rowSelect" listener="#{editPropertyBean.editSelected()}" update=":propertyForm" />
+                                <p:column headerText="Id" style="width:50px; text-align: right;">
+                                    <h:outputText value="#{property.iremPropertyId}" />
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{property.description}" />
+                                </p:column>
+                                <p:column headerText="Code">
+                                    <h:outputText value="#{property.iremPropertyCode}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+    </ui:fragment>
+</html>
+
+
+

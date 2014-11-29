@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Irem</title>
+        <style type="text/css" media="screen">
+            #editor { 
+                margin: 0;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+
+        </style>
+        <link href="#{request.contextPath}/resources/css/common.css" type="text/css" rel="stylesheet" /> 
+        <script src="#{request.contextPath}/resources/js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="#{request.contextPath}/resources/js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+        <script>
+            var editor;
+            function createEditor() {
+                var langTools = ace.require("ace/ext/language_tools");
+                editor = ace.edit("editor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/groovy");
+                editor.on('blur', function () {
+                    sendCodeToServer();
+                });
+                editor.on('change', function () {
+                    sendCodeToServer();
+                });
+
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true
+                });
+
+                var rhymeCompleter = {
+                    getCompletions: function (editor, session, pos, prefix, callback) {
+                        if (prefix.length === 0) {
+                            callback(null, []);
+                            return;
+                        }
+                        $.getJSON(
+                                //"#{request.contextPath}/restful/editor/codecomplete/" + prefix,
+                                "#{request.contextPath}/groovyEditorServlet?process=autocomplete&amp;text=" + prefix,
+                                function (wordList) {
+
+                                    callback(null, wordList.map(function (ea) {
+                                        return {name: ea.word, value: ea.word, score: ea.score, meta: ea.description};
+                                    }));
+                                });
+                    }
+                };
+                langTools.addCompleter(rhymeCompleter);
+                getCodeFromServer();
+            }
+
+            function sendCodeToServer() {
+
+
+                $.ajax({
+                    url: "#{request.contextPath}/groovyEditorServlet?process=setText&amp;text=" + encodeURI(editor.getSession().getValue()),
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                    dataType: "text",
+                    success: function (data) {
+
+                    },
+                    error: function (data) {
+                    }
+                });
+
+            }
+
+            function getCodeFromServer() {
+
+                $.ajax({
+                    url: "#{request.contextPath}/groovyEditorServlet?process=getText",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+                    dataType: "text",
+                    success: function (data) {
+                        editor.getSession().setValue(data);
+                    },
+                    error: function (data) {
+                    }
+                });
+
+
+            }
+
+            function insertCodeToEditor() {
+                var selectedValue = document.getElementById("mainForm:dataDictionaryList_input").value;
+                editor.insert(selectedValue);
+                sendCodeToServer();
+            }
+
+            function insertTemplateToEditor() {
+                var selectedValue = document.getElementById("mainForm:codeTemplateList_input").value;
+                editor.insert("\n" + selectedValue + "\n");
+                sendCodeToServer();
+            }
+
+        </script>
+
+    </h:head>
+    <h:body onload="createEditor();">
+        <p:growl showDetail="true" autoUpdate="true" />
+        <h:form id="mainForm" >
+            <p:layout id="mainLayout" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;">
+                <p:layoutUnit size="35" position="north" style="border:none;margin:0px;padding: 0px;position: absolute;top: 0;left: 0;right: 0;bottom: 0; width: 99%;">
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:panelGrid>
+                                <p:row>
+                                    <p:column style="padding: 1px;">
+                                        <p:menuButton value="Definations">
+                                            <p:menuitem value="Formula Editor" oncomplete="PF('editFormulaWidget').show();" />
+                                            <p:menuitem value="Property Editor" oncomplete="PF('editPropertyWidget').show();" />
+                                            <p:menuitem value="Property Value Editor" oncomplete="PF('editPropertyValueWidget').show();" />
+                                            <p:menuitem value="Formula Property Editor" actionListener="#{editFormulaPropertyBean.retrieveFormulas()}" oncomplete="PF('editFormulaPropertyWidget').show();" update=":formulaPropertyForm" />
+                                            <p:menuitem value="Module Editor" actionListener="#{editModuleBean.retrieveModules()}" oncomplete="PF('editModuleWidget').show();" update=":moduleForm" />
+                                            <p:menuitem value="Module Formula Editor" actionListener="#{editModuleBean.retrieveModules()}" oncomplete="PF('editModuleFormulaWidget').show();" update=":moduleFormulaForm" />
+                                        </p:menuButton>
+                                    </p:column>
+                                    <p:column style="padding: 1px;">
+                                        <p:menuButton value="Templates">
+                                            <p:menuitem value="Code Template Editor" oncomplete="PF('editCodeTemplateWidget').show();" />
+                                            <p:menuitem value="Import Template Editor" oncomplete="PF('editImportTemplateWidget').show();" />
+                                        </p:menuButton>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+                        </f:facet>
+                    </p:toolbar>
+
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <p:layout id="subLayout" style="border:none; position: absolute;top: 0;left: 0;right: 0;bottom: 0;">
+                        <p:layoutUnit id="subNorthLayout" position="north" size="34" minSize="34" maxSize="34" style="border:none;padding: 0px; margin: 0px;position: absolute;top: 0;left: 0;right: 0;bottom: 0; width: 99%;">
+                            <p:toolbar>
+                                <f:facet name="left">     
+                                    <p:commandButton title="New" actionListener="#{groovyEditorBean.createNewScript()}" oncomplete="getCodeFromServer();" icon="ui-icon-document" />
+                                    <p:commandButton title="Save" actionListener="#{groovyEditorBean.saveScript()}" update=":mainForm:scriptList,:scriptNameForm" icon="ui-icon-disk" />
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton title="Run" actionListener="#{groovyEditorBean.runCode()}" update=":mainForm:resultArea" icon="ui-icon-play" />
+                                    <p:commandButton title="Parameter" oncomplete="PF('scriptParameterWidget').show();" update=":scriptParameterForm" icon="ui-icon-extlink" />
+                                    <p:commandButton title="Import" oncomplete="PF('scriptImportWidget').show();" update=":scriptImportForm" icon="ui-icon-arrowthickstop-1-s" />
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton title="Undo" oncomplete="editor.undo();" icon="ui-icon-arrowreturnthick-1-w" />
+                                    <p:commandButton title="Redo" oncomplete="editor.redo();" icon="ui-icon-arrowreturnthick-1-e" />
+                                    <span class="ui-separator">
+                                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                                    </span>
+                                    <p:commandButton title="Search" icon="ui-icon-search" />
+                                </f:facet>
+                            </p:toolbar>
+                        </p:layoutUnit>
+                        <p:layoutUnit  position="center" style="border:none;">
+                            <span id="editor"></span>
+                        </p:layoutUnit>
+                    </p:layout>
+                </p:layoutUnit>
+                <p:layoutUnit id="westLayout" position="west" resizable="true" size="300" minSize="200" maxSize="450" >
+                    <p:selectOneListbox id="scriptList" value="#{groovyEditorBean.selectedScript}" converter="commonConverter" filter="true" scrollHeight="-1" filterMatchMode="contains" style="border : none;width:97%; height: 99%; ">
+                        <p:ajax event="dblclick" listener="#{groovyEditorBean.changeSelectedScript()}" oncomplete="getCodeFromServer()"  />
+                        <f:selectItems value="#{groovyEditorBean.scriptList}" var="script" itemLabel="#{script.description}" itemValue="#{script}"  />
+                    </p:selectOneListbox>
+                </p:layoutUnit>
+                <p:layoutUnit position="east" resizable="true" size="300" minSize="200" maxSize="450">
+                    <p:selectOneListbox id="dataDictionaryList" filter="true" filterMatchMode="contains" scrollHeight="-1" style="border : none;margin: 0px 0px 5px 0px; width:97%; height: 48%;">
+                        <p:ajax event="dblclick" oncomplete="insertCodeToEditor();" />
+                        <f:selectItems value="#{groovyEditorBean.propertyCodeList}" var="code" itemLabel="#{code.description}" itemValue="#{code.code}" />
+                    </p:selectOneListbox>
+                    <p:selectOneListbox id="codeTemplateList" filter="true" filterMatchMode="contains" scrollHeight="-1"  style="border : none;margin:0; width:97%; height: 48%;">
+                        <p:ajax event="dblclick" oncomplete="insertTemplateToEditor();" />
+                        <f:selectItems value="#{groovyEditorBean.codeTemplateList}" var="template" itemLabel="#{template.description}" itemValue="#{template.codeText}" />
+                    </p:selectOneListbox>
+                </p:layoutUnit>
+                <p:layoutUnit resizable="true" position="south" size="100" minSize="75" maxSize="250" style="padding: 0px;">
+                    <p:inputTextarea id="resultArea" value="#{groovyEditorBean.resultText}" autoResize="false" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0; width: 99%;"/>
+                </p:layoutUnit>
+            </p:layout>
+        </h:form>
+        <p:dialog id="editFormula" modal="true" appendTo="@(body)" width="600" height="400" showHeader="true" widgetVar="editFormulaWidget" header="Formula Editor" closeOnEscape="true">
+            <ui:include src="editFormula.xhtml" />
+        </p:dialog>
+        <p:dialog id="editProperty" modal="true" appendTo="@(body)" width="600" height="400" showHeader="true" widgetVar="editPropertyWidget" header="Property Editor" closeOnEscape="true">
+            <ui:include src="editProperty.xhtml" />
+        </p:dialog>
+        <p:dialog id="editPropertyValue" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="editPropertyValueWidget" header="Property Value Editor" closeOnEscape="true">
+            <ui:include src="editPropertyValue.xhtml" />
+        </p:dialog>
+        <p:dialog id="editFormulaProperty" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="editFormulaPropertyWidget" header="Formula Property Editor" closeOnEscape="true">
+            <ui:include src="editFormulaProperty.xhtml" />
+        </p:dialog>
+        <p:dialog id="editModule" modal="true" appendTo="@(body)" width="600" height="500" showHeader="true" widgetVar="editModuleWidget" header="Module Editor" closeOnEscape="true">
+            <ui:include src="editModule.xhtml" />
+        </p:dialog>
+        <p:dialog id="editModuleFormula" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="editModuleFormulaWidget" header="Module Formula Editor" closeOnEscape="true">
+            <ui:include src="editModuleFormula.xhtml" />
+        </p:dialog>
+        <p:dialog id="editCodeTemplate" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="editCodeTemplateWidget" header="Code Template Editor" closeOnEscape="true">
+            <ui:include src="editCodeTemplate.xhtml" />
+        </p:dialog>
+        <p:dialog id="editImportTemplate" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="editImportTemplateWidget" header="Import Template Editor" closeOnEscape="true">
+            <ui:include src="editImportTemplate.xhtml" />
+        </p:dialog>
+        <p:dialog id="scriptParameter" modal="true" appendTo="@(body)" width="800" height="500" showHeader="true" widgetVar="scriptParameterWidget" header="Script Parameter" closeOnEscape="true">
+            <ui:include src="scriptParameter.xhtml" />
+        </p:dialog>
+        <p:dialog id="scriptImport" modal="true" appendTo="@(body)" width="500" height="300" showHeader="true" widgetVar="scriptImportWidget" header="Script Import" closeOnEscape="true">
+            <ui:include src="scriptImport.xhtml" />
+        </p:dialog>
+        <p:dialog id="scriptName" modal="true" appendTo="@(body)" width="500" height="100" showHeader="true" widgetVar="scriptNameWidget" header="Script Name" closeOnEscape="true">
+            <ui:include src="scriptName.xhtml" />
+        </p:dialog>
+    </h:body>
+</html>

@@ -1,0 +1,99 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 19, 2014, 2:10:11 PM
+    Author     : Mehmet Adem Şengül
+*/
+
+root { 
+    display: block;
+}
+
+body{ 
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    line-height: 1.6em; 
+    font-family: Tahoma,Geneva,Kalimati,sans-serif;
+    background-color: #E2E2E2;
+}
+
+#main{
+    width: 970px; 
+    margin: 0 auto; 
+    margin-top: 100px;
+    margin-bottom: 30px;
+}
+
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.insyst-label{
+    font-weight: bold;
+}
+
+.ui-panelgrid tr, .ui-panelgrid td{
+    border:0 !important;
+}   
+
+.ui-panelgrid tr {
+    background-color: inherit;
+}
+
+img {  
+    border-style: none;
+}
+
+a, a:link, a:visited { color: #336699; font-weight: normal; text-decoration: none }
+a:hover { color: #FF6; text-decoration: none; }
+
+ul, li {
+    padding:0;
+    margin:0;
+    list-style:none;
+}
+
+.ui-wizard-step-title {
+    font-size: 12px;
+    margin: 0 3px 0 0;
+    padding: 0.4em;
+    float: left;
+}
+
+#header{
+    top:0px;
+    left:0px; 
+    height:60px; 
+    width:100%;
+    float: left;
+}
+
+.shadowed-box{
+    border: 1px solid #eee; 
+    -webkit-box-shadow: 0px 10px 3px 3px #B0B0B0;
+    -moz-box-shadow: 0px 10px 3px 5px #B0B0B0;
+    box-shadow: 0px 3px 10px 5px #B0B0B0;
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#B0B0B0');
+}
+
+.menuitem{
+    vertical-align: middle;
+    text-align: center;
+    color: #FFFFFF;    
+    float: left; 
+    height: 15px;
+    padding: 0px 0px 0px 15px;
+}
+
+.imagebox a{
+    margin-left: 10px;
+}

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:fragment>
+        <h:form id="formulaPropertyForm">
+            <p:panelGrid>
+                <p:row>
+                    <p:column style="vertical-align: top;width: 300px;" rowspan="2">
+                        <p:dataTable id="formulaPropertyTable" var="formula" value="#{editFormulaPropertyBean.formulaList}" selectionMode="single" selection="#{editFormulaPropertyBean.selectedFormula}" rowKey="#{formula.iremFormulaId}">
+                            <p:ajax event="rowSelect" listener="#{editFormulaPropertyBean.editSelected()}" update=":formulaPropertyForm" />
+                            <p:column headerText="Id" style="width:50px; text-align: right;">
+                                <h:outputText value="#{formula.iremFormulaId}" />
+                            </p:column>
+                            <p:column headerText="Description">
+                                <h:outputText value="#{formula.description}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column style="vertical-align: top;">
+                        <p:pickList id="formulaPropertyPickList" showSourceFilter="true" showTargetFilter="true" value="#{editFormulaPropertyBean.propertyDualList}" var="property" itemLabel="#{property.description}" itemValue="#{property}" converter="commonConverter" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:commandButton value="Save Properties" actionListener="#{editFormulaPropertyBean.saveFormula()}" update=":formulaPropertyForm:formulaPropertyPickList" style="float: right;" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </h:form>
+    </ui:fragment>
+</html>
+
+
+
