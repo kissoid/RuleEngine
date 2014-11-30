@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import java.io.Serializable;
@@ -51,7 +50,6 @@ public class Rule implements Serializable {
         @JoinColumn(name = "import_template_id", referencedColumnName = "import_template_id", nullable = false)})
     @ManyToMany
     private List<ImportTemplate> importTemplateList;
-
 
     public Rule() {
     }
@@ -136,5 +134,5 @@ public class Rule implements Serializable {
     public String toString() {
         return "com.raven.rem.entity.Script[ scriptId=" + ruleId + " ]";
     }
-    
+
 }

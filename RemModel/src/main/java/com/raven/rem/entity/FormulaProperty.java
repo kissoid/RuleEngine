@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import java.io.Serializable;
@@ -28,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "formula_property", catalog = "", schema = "")
 @XmlRootElement
 public class FormulaProperty implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected FormulaPropertyPK formulaPropertyPK;
@@ -51,15 +51,15 @@ public class FormulaProperty implements Serializable {
         this.formulaPropertyPK = new FormulaPropertyPK(formulaId, propertyId);
     }
 
-	@PrePersist
-	@PreUpdate
-	private void prePersistUpdate() {
-            if (formulaValueList != null) {
-                for (FormulaValue formulaValue : formulaValueList) {
-                    formulaValue.setFormulaProperty(this);
-			}
-		}
-	}
+    @PrePersist
+    @PreUpdate
+    private void prePersistUpdate() {
+        if (formulaValueList != null) {
+            for (FormulaValue formulaValue : formulaValueList) {
+                formulaValue.setFormulaProperty(this);
+            }
+        }
+    }
 
     public FormulaPropertyPK getFormulaPropertyPK() {
         return formulaPropertyPK;
@@ -118,5 +118,5 @@ public class FormulaProperty implements Serializable {
     public String toString() {
         return "com.raven.rem.entity.FormulaProperty[ formulaPropertyPK=" + formulaPropertyPK + " ]";
     }
-    
+
 }

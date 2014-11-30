@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import java.io.Serializable;
@@ -31,10 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "formula", catalog = "", schema = "")
 @XmlRootElement
 public class Formula implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-	@SequenceGenerator(name = "formulaSeqGenerator", sequenceName = "SEQ_FORMULA", allocationSize = 1)
-	@GeneratedValue(generator = "formulaSeqGenerator", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "formulaSeqGenerator", sequenceName = "SEQ_FORMULA", allocationSize = 1)
+    @GeneratedValue(generator = "formulaSeqGenerator", strategy = GenerationType.AUTO)
     @Column(name = "formula_id", nullable = false)
     private Short formulaId;
     @Basic(optional = false)
@@ -59,7 +59,7 @@ public class Formula implements Serializable {
 
     @PrePersist
     @PreUpdate
-    private void prePersistUpdate(){
+    private void prePersistUpdate() {
         if (formulaPropertyList != null) {
             for (FormulaProperty formulaProperty : formulaPropertyList) {
                 if (formulaProperty.getFormulaPropertyPK() == null) {
@@ -76,9 +76,9 @@ public class Formula implements Serializable {
                 formulaValueSeq.setFormula(this);
             }
         }
-        
+
     }
-    
+
     public Short getFormulaId() {
         return formulaId;
     }
@@ -137,5 +137,5 @@ public class Formula implements Serializable {
     public String toString() {
         return "com.raven.rem.entity.Formula[ formulaId=" + formulaId + " ]";
     }
-    
+
 }

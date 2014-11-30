@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import java.io.Serializable;
@@ -27,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "property_code", catalog = "", schema = "")
 @XmlRootElement
 public class PropertyCode implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name = "propertyCodeSeqGenerator", sequenceName = "SEQ_PROPERTY_CODE", allocationSize = 1)
@@ -112,5 +112,5 @@ public class PropertyCode implements Serializable {
     public String toString() {
         return "com.raven.rem.entity.PropertyCode[ propertyCodeId=" + propertyCodeId + " ]";
     }
-    
+
 }

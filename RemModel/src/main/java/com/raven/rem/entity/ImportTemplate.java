@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import com.raven.rem.converter.BooleanConverter;
@@ -33,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "import_template", catalog = "", schema = "")
 @XmlRootElement
 public class ImportTemplate implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name = "importTemplateSeqGenerator", sequenceName = "SEQ_IMPORT_TEMPLATE", allocationSize = 1)

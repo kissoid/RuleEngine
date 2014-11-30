@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.raven.rem.entity;
 
 import java.io.Serializable;
@@ -33,10 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "property_value", catalog = "", schema = "")
 @XmlRootElement
 public class PropertyValue implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-	@SequenceGenerator(name = "propertyValueSeqGenerator", sequenceName = "SEQ_PROPERTY_VALUE", allocationSize = 1)
-	@GeneratedValue(generator = "propertyValueSeqGenerator", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "propertyValueSeqGenerator", sequenceName = "SEQ_PROPERTY_VALUE", allocationSize = 1)
+    @GeneratedValue(generator = "propertyValueSeqGenerator", strategy = GenerationType.AUTO)
     @Column(name = "property_value_id", nullable = false)
     private Short propertyValueId;
     @Basic(optional = false)
@@ -60,15 +60,15 @@ public class PropertyValue implements Serializable {
         this.valString = valString;
     }
 
-	@PrePersist
-	@PreUpdate
-	private void prePersistUpdate() {
-            if (formulaValueList != null) {
-                for (FormulaValue formulaValue : formulaValueList) {
-                        formulaValue.setPropertyValue(this);
-			}
-		}
-	}
+    @PrePersist
+    @PreUpdate
+    private void prePersistUpdate() {
+        if (formulaValueList != null) {
+            for (FormulaValue formulaValue : formulaValueList) {
+                formulaValue.setPropertyValue(this);
+            }
+        }
+    }
 
     public Short getPropertyValueId() {
         return propertyValueId;
@@ -103,9 +103,9 @@ public class PropertyValue implements Serializable {
         this.formulaValueList = formulaValueList;
     }
 
-	public int getRowKey() {
-		return this.hashCode();
-	}
+    public int getRowKey() {
+        return this.hashCode();
+    }
 
     @Override
     public boolean equals(Object object) {
@@ -124,5 +124,5 @@ public class PropertyValue implements Serializable {
     public String toString() {
         return "com.raven.rem.entity.PropertyValue[ propertyValueId=" + propertyValueId + " ]";
     }
-    
+
 }
